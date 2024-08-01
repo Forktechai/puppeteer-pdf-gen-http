@@ -1,0 +1,25 @@
+node_modules
+tmp
+*.log*
+.nuxt
+.nitro
+.cache
+.output
+.env
+dist
+.DS_Store
+public
+*.ttf
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.local
+
+# 测试忽略文件
+cypress/screenshots
+cypress/videos
