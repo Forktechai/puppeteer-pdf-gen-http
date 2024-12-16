@@ -7,12 +7,13 @@ const fs = require('fs')
 import fsPromise from 'fs/promises'
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl} from "@aws-sdk/s3-request-presigner";
-
+const accessKeyId = process.env.AWS_ACCESSKEYID ?? ""
+const secretAccessKey = process.env.AWS_SECRETACCESSKEY ?? ""
 const s3Client = new S3Client({
   region: 'cn-northwest-1',
   credentials: {
-    accessKeyId: process.env.AWS_ACCESSKEYID,
-    secretAccessKey: process.env.AWS_SECRETACCESSKEY
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey
   }
 });
 
