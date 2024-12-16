@@ -22,6 +22,7 @@ localApp.use(express.static('public/paper-template'))
 localApp.use(express.static('public/datasheet-template'))
 localApp.use(express.static('public/report-template-site'))
 localApp.use(express.static('public/consumerwork-predata-template'))
+localApp.use(express.static('public/mistake-work-template'))
 localApp.listen(3002, () => {
   console.log("server started")
 })

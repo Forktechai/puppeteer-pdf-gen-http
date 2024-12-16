@@ -5,9 +5,14 @@ import {uploadFile2AwsS3, file2A3OrB4, createPresignedUrlWithClient } from "./ut
 import fs from 'fs/promises';
 
 let pdf_template_url = "http://localhost:3002/paper-template";
+let mistake_template_url = "http://localhost:3002/mistake-work-template"
 
 export async function genPaper(gen: PdfGen, paperData: any, config: Config) {
-  const url = pdf_template_url;
+  let url = pdf_template_url;
+  if (paperData.workType == 'MistakeQuestion') {
+    url = mistake_template_url
+  }
+
   console.log('start to gen TestPaper')
   console.log('url:', url)
   let paperFile = '';
