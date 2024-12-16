@@ -10,14 +10,13 @@ class Config {
    QR_MARGINY = 60
    QR_WIDTH = 50
    QR_HEIGHT = 50
-   TMP_PATH: string
+   TMP_PATH: string = "/tmp"
    constructor() {
       this.GAOSHOU_URL = 'https://gaoshouai.com'
       this.AWS_BUCKET_NAME =  process.env.AWS_BUCKET_NAME ?? "gaoshoutest"
       this.AWS_REGION =  'cn-northwest-1'
-      this.AWS_ACCESSKEYID =  process.env.AWS_ACCESSKEYID
-      this.AWS_SECRETACCESSKEY =  process.env.AWS_SECRETACCESSKEY
-      this.TMP_PATH = "/tmp"
+      this.AWS_ACCESSKEYID =  process.env.AWS_ACCESSKEYID ?? ""
+      this.AWS_SECRETACCESSKEY =  process.env.AWS_SECRETACCESSKEY ?? ""
    }
    init(env:string) {
       console.log(`config init ${env}`)

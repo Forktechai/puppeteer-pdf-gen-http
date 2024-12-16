@@ -87,6 +87,7 @@ router.post('/pdf-gen/paperSize/:paperSize', async (req: any, res: any) => {
   }
 })
 
+// todo: 个人作业的预览 判断模板类型
 router.post('/individualWork/:individualWorkId/student/:studentId/preview/paperSize/:paperSize', async (req: any, res: any) => {
   const individualWorkId = req.params.individualWorkId;
   const studentId = req.params.studentId;
