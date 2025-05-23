@@ -79,6 +79,10 @@ router.post('/pdf-gen/paperSize/:paperSize', async (req: any, res: any) => {
     }
     const paperData = req.body;
     paperData.paperSize = paperSize;
+    paperData.matchStudentMethodType = paperData.matchStudentMethodType ?? "Qrcode";
+    console.log("title:", paperData.title)
+    console.log("subTitle:", paperData.subTitle)
+    
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
   }
