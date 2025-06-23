@@ -1,5 +1,5 @@
 
-import { Config } from './config.js';
+import { Config, studentCodeBoxBase64 } from './config.js';
 import { PdfGen } from './pdfgen.js';
 import express from 'express'
 import { Backend } from './backend_api.js';
@@ -79,7 +79,10 @@ router.post('/pdf-gen/paperSize/:paperSize', async (req: any, res: any) => {
     }
     const paperData = req.body;
     paperData.paperSize = paperSize;
-    paperData.matchStudentMethodType = paperData.matchStudentMethodType ?? "Qrcode";
+    const matchStudentMethodType = paperData.matchStudentMethodType ?? "Qrcode";
+    if(matchStudentMethodType == "FilledStudentCode") {
+      paperData.studentCodeBoxBase64 = studentCodeBoxBase64
+  } 
     console.log("title:", paperData.title)
     console.log("subTitle:", paperData.subTitle)
     
