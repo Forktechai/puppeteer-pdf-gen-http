@@ -79,6 +79,7 @@ router.post('/pdf-gen/paperSize/:paperSize', async (req: any, res: any) => {
     }
     const paperData = req.body;
     paperData.paperSize = paperSize;
+    paperData.matchStudentMethodType = paperData.matchStudentMethodType ?? "Qrcode";
     const matchStudentMethodType = paperData.matchStudentMethodType ?? "Qrcode";
     if(matchStudentMethodType == "FilledStudentCode") {
       paperData.studentCodeBoxBase64 = studentCodeBoxBase64
