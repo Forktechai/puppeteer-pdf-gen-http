@@ -17,8 +17,8 @@ FROM public.ecr.aws/lambda/nodejs:16.2023.11.10.17
 WORKDIR ${LAMBDA_TASK_ROOT}
 RUN npm install -g pnpm typescript
 COPY package.json pnpm-lock.yaml ./
-COPY fonts ./fonts
 RUN pnpm install
+COPY fonts ./fonts
 COPY public ./public
 COPY *.ts *.json ./
 RUN pnpm run build
