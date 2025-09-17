@@ -9,13 +9,20 @@ class Pup {
     this.page = null
   }
   async init() { // 初始化浏览器，并创建一个page
-    this.browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: true,
-    })
-    this.page = await this.browser.newPage()
+    try {
+      console.log("puppeteer init")
+      this.browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: true,
+      })
+      this.page = await this.browser.newPage()
+      console.log("puppeteer init ok")
+    }
+    catch (err: any) {
+      console.log("puppeteer init err:", err.message)
+    }
   }
   async close() { // 关闭浏览器
     if (this.browser !== null) {
@@ -23,6 +30,7 @@ class Pup {
         console.log("close browser")
         this.browser.close()
         this.browser = null
+        this.page = null
         console.log("browser closed")
       }
       catch (err: any) {

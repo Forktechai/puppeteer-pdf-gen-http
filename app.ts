@@ -14,8 +14,8 @@ const env = process.env.ENV ?? "prod";
 let gaoshouUrl = config.GAOSHOU_URL;
 
 
-let initialized = false
-let gen: PdfGen | undefined = undefined
+// let initialized = false
+// let gen: PdfGen | undefined = undefined
 
 const localApp = express()
 localApp.use(express.static('public'))
@@ -52,18 +52,19 @@ router.post('/test', async (req: any, res: any) => {
 
 router.post('/pdf-gen', async (req: any, res: any) => {
   try {
-    if (!initialized) {
-      gen = new PdfGen()
-      await gen.init()
-      console.log("pdf_gen init ok...")
-      initialized = true
-    }
-    await gen?.initPage();
+    // if (!initialized) {
+    //   gen = new PdfGen()
+    //   await gen.init()
+    //   console.log("pdf_gen init ok...")
+    //   initialized = true
+    // }
+    let gen = new PdfGen()
+    await gen.init()
     const paperData = req.body;
     paperData.paperSize = "A3"
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
-    await gen?.closePage();
+    await gen.close()
   }
   catch (err: any) {
     return "";
@@ -74,13 +75,8 @@ router.post('/pdf-gen/paperSize/:paperSize', async (req: any, res: any) => {
   let paperSize: string = req.params.paperSize;
   console.log("paperSize:", paperSize);
   try {
-    if (!initialized) {
-      gen = new PdfGen()
-      await gen.init()
-      console.log("pdf_gen init ok...")
-      initialized = true
-    }
-    await gen?.initPage();
+    let gen = new PdfGen()
+    await gen.init()
     const paperData = req.body;
     paperData.paperSize = paperSize;
     paperData.matchStudentMethodType = paperData.matchStudentMethodType ?? "Qrcode";
@@ -93,7 +89,7 @@ router.post('/pdf-gen/paperSize/:paperSize', async (req: any, res: any) => {
 
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
-    await gen?.closePage();
+    await gen?.close();
   }
   catch (err: any) {
     return "";
@@ -109,12 +105,14 @@ router.post('/individualWork/:individualWorkId/student/:studentId/preview/paperS
   console.log("studentId", studentId)
   console.log("paperSize", paperSize)
   try {
-    if (!initialized) {
-      gen = new PdfGen()
-      await gen.init()
-      console.log("pdf_gen init ok...")
-      initialized = true
-    }
+    // if (!initialized) {
+    //   gen = new PdfGen()
+    //   await gen.init()
+    //   console.log("pdf_gen init ok...")
+    //   initialized = true
+    // }
+    let gen = new PdfGen()
+    await gen.init()
     await gen?.initPage();
     let backend: Backend = new Backend(gaoshouUrl);
     const studentPara = await backend.getIndividualWorkPara(individualWorkId, studentId);
@@ -128,7 +126,7 @@ router.post('/individualWork/:individualWorkId/student/:studentId/preview/paperS
     paperData.paperSize = paperSize;
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
-    await gen?.closePage();
+    await gen.close()
   }
   catch (err: any) {
     console.error("individual work preview err: ", err);
