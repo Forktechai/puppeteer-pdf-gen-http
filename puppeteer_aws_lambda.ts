@@ -8,18 +8,48 @@ class Pup {
     this.browser = null
     this.page = null
   }
-  async init() {
+  async init() { // 初始化浏览器，并创建一个page
     this.browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
+      headless: true,
     })
     this.page = await this.browser.newPage()
   }
-  async close() {
-    if (this.page !== null) this.page.close()
-    if (this.browser !== null) this.browser.close()
+  async close() { // 关闭浏览器
+    if (this.browser !== null) {
+      try {
+        console.log("close browser")
+        this.browser.close()
+        this.browser = null
+        console.log("browser closed")
+      }
+      catch (err: any) {
+        console.log("close browser err:", err.message)
+      }
+
+    }
+  }
+  async closePage() { // 关闭page
+    if (this.page) {
+      console.log("close page")
+      await this.page.close()
+      this.page = null
+      console.log("page closed")
+    }
+  }
+  async initPage() { // 初始化page
+    try {
+      if (this.page == null) {
+        console.log("init page")
+        this.page = await this.browser!.newPage()
+        console.log("page initialized")
+      }
+    }
+    catch (err: any) {
+      console.log("init page err:", err.message)
+    }
   }
   async genPdf(url: string, paperData: any, isNewPage: boolean, pdfGenOptions: PdfGenOptions) {
     console.log('puppeteer gen pdf')
@@ -42,7 +72,7 @@ class Pup {
       console.time('pdf gen')
       // 手写框是否启用, 默认启用
       console.log(`handWriting Enable:${paperData.handWritingEnable}`)
-      if(paperData.handWritingEnable != undefined) {
+      if (paperData.handWritingEnable != undefined) {
         await this.page.evaluate((handWritingEnable: any) => {
           // @ts-ignore
           setWritingEnable(handWritingEnable)
@@ -64,7 +94,7 @@ class Pup {
           img.src = ''; // 清空 src，初始不加载
         });
       });
-      
+
       // 动态加载图片并实现并发控制
       await this.page.evaluate(async (maxConcurrent: number, retryCount: number, timeout: number) => {
         const images = Array.from(document.querySelectorAll('img'));
@@ -104,7 +134,7 @@ class Pup {
                     try {
                       await loadImage(img);
                       return;
-                    } catch (retryError:any) {
+                    } catch (retryError: any) {
                       console.error(`Retry ${retry} failed: ${retryError.message}`);
                     }
                   }

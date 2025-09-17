@@ -13,7 +13,7 @@
 # EXPOSE 8080
 # CMD ["index.handler"]
 
-FROM public.ecr.aws/lambda/nodejs:16.2023.11.10.17
+FROM public.ecr.aws/lambda/nodejs:18
 WORKDIR ${LAMBDA_TASK_ROOT}
 RUN npm install -g pnpm typescript
 COPY package.json pnpm-lock.yaml ./

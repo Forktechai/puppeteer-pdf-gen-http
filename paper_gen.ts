@@ -1,7 +1,7 @@
 import { PdfGen } from "./pdfgen";
 import { Config } from "./config";
 import path from 'path'
-import {uploadFile2AwsS3, file2A3OrB4, createPresignedUrlWithClient } from "./utils";
+import { uploadFile2AwsS3, file2A3OrB4, createPresignedUrlWithClient } from "./utils";
 import fs from 'fs/promises';
 
 let pdf_template_url = "http://localhost:3002/paper-template";

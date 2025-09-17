@@ -4,6 +4,7 @@ import { PdfGen } from './pdfgen.js';
 import express from 'express'
 import { Backend } from './backend_api.js';
 import { genPaper } from './paper_gen.js';
+import { Pup } from './puppeteer_aws_lambda.js';
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
@@ -57,10 +58,12 @@ router.post('/pdf-gen', async (req: any, res: any) => {
       console.log("pdf_gen init ok...")
       initialized = true
     }
+    await gen?.initPage();
     const paperData = req.body;
     paperData.paperSize = "A3"
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
+    await gen?.closePage();
   }
   catch (err: any) {
     return "";
@@ -77,18 +80,20 @@ router.post('/pdf-gen/paperSize/:paperSize', async (req: any, res: any) => {
       console.log("pdf_gen init ok...")
       initialized = true
     }
+    await gen?.initPage();
     const paperData = req.body;
     paperData.paperSize = paperSize;
     paperData.matchStudentMethodType = paperData.matchStudentMethodType ?? "Qrcode";
     const matchStudentMethodType = paperData.matchStudentMethodType ?? "Qrcode";
-    if(matchStudentMethodType == "FilledStudentCode") {
+    if (matchStudentMethodType == "FilledStudentCode") {
       paperData.studentCodeBoxBase64 = studentCodeBoxBase64
-  } 
+    }
     console.log("title:", paperData.title)
     console.log("subTitle:", paperData.subTitle)
-    
+
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
+    await gen?.closePage();
   }
   catch (err: any) {
     return "";
@@ -100,7 +105,7 @@ router.post('/individualWork/:individualWorkId/student/:studentId/preview/paperS
   const individualWorkId = req.params.individualWorkId;
   const studentId = req.params.studentId;
   let paperSize: string = req.params.paperSize;
-  console.log("individualWorkId:",individualWorkId)
+  console.log("individualWorkId:", individualWorkId)
   console.log("studentId", studentId)
   console.log("paperSize", paperSize)
   try {
@@ -110,6 +115,7 @@ router.post('/individualWork/:individualWorkId/student/:studentId/preview/paperS
       console.log("pdf_gen init ok...")
       initialized = true
     }
+    await gen?.initPage();
     let backend: Backend = new Backend(gaoshouUrl);
     const studentPara = await backend.getIndividualWorkPara(individualWorkId, studentId);
     let paperData: any;
@@ -122,6 +128,7 @@ router.post('/individualWork/:individualWorkId/student/:studentId/preview/paperS
     paperData.paperSize = paperSize;
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
+    await gen?.closePage();
   }
   catch (err: any) {
     console.error("individual work preview err: ", err);

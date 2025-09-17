@@ -1,5 +1,4 @@
 import { Pup, PupWapper } from './puppeteer_aws_lambda'
-//import { Pup, PupWapper } from './puppeteer_local'
 import fs from 'fs/promises'
 import { paperSizeStr2Enum } from './utils.js'
 import { Config, PdfGenOptions } from './config.js';
@@ -16,12 +15,12 @@ class PdfGen {
     this.pup = await PupWapper()
   }
 
-  async gen(url: string, paper_data: any, config:Config, isNewPage: boolean) {
+  async gen(url: string, paper_data: any, config: Config, isNewPage: boolean) {
     console.log('gen')
     if (!this.pup) {
       return ''
     }
-    const baseUrl =config.TMP_PATH;
+    const baseUrl = config.TMP_PATH;
     const paperSize = paperSizeStr2Enum(paper_data.paperSize)
     let pdfGenOptions: PdfGenOptions = new PdfGenOptions(paperSize);
     pdfGenOptions.init();
@@ -40,6 +39,17 @@ class PdfGen {
       return ''
     }
   }
+
+  async initPage() {
+    await this.pup?.initPage()
+  }
+
+  async closePage() {
+    await this.pup?.closePage();
+  }
+  async close() {
+    await this.pup?.close();
+  }
 }
 
-export { PdfGen}
+export { PdfGen }
