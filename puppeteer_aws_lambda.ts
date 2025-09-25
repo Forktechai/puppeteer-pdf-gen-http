@@ -146,7 +146,7 @@ class Pup {
                       console.error(`Retry ${retry} failed: ${retryError.message}`);
                     }
                   }
-                  throw new Error(`Max retries reached for image: ${img.dataset.src}`);
+                  return new Error(`Max retries reached for image: ${img.dataset.src}`);
                 })
               )
             );
