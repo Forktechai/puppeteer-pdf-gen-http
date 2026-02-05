@@ -62,6 +62,7 @@ router.post('/pdf-gen', async (req: any, res: any) => {
     await gen.init()
     const paperData = req.body;
     paperData.paperSize = "A3"
+    paperData.handWritingEnable = false // 默认为false
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
     await gen.close()
@@ -84,6 +85,7 @@ router.post('/pdf-gen/paperSize/:paperSize', async (req: any, res: any) => {
     if (matchStudentMethodType == "FilledStudentCode") {
       paperData.studentCodeBoxBase64 = studentCodeBoxBase64
     }
+    paperData.handWritingEnable = false // 默认为false
     console.log("title:", paperData.title)
     console.log("subTitle:", paperData.subTitle)
 
@@ -124,6 +126,7 @@ router.post('/individualWork/:individualWorkId/student/:studentId/preview/paperS
     paperData.answerSheetBase64 = studentPara.answerSheetBase64;
     paperData.questions = studentPara.questions;
     paperData.paperSize = paperSize;
+    paperData.handWritingEnable = false // 默认为false
     const preSignUrl = await genPaper(gen as PdfGen, paperData, config);
     res.send(preSignUrl)
     await gen.close()
