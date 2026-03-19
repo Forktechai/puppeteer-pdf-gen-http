@@ -4,8 +4,8 @@ import path from 'path'
 import { uploadFile2AwsS3, file2A3OrB4, createPresignedUrlWithClient } from "./utils";
 import fs from 'fs/promises';
 
-let pdf_template_url = process.env.PDF_TEMPLATE ?? "http://localhost:3002/paper-template";
-let mistake_template_url = "http://localhost:3002/mistake-work-template"
+let pdf_template_url = process.env.PDF_TEMPLATE ?? "https://template.quandouhuiai.com/develop/paper-template";
+let mistake_template_url = process.env.MISTAKE_WORK_TEMPLATE ?? "https://template.quandouhuiai.com/develop/mistake-work-template"
 
 export async function genPaper(gen: PdfGen, paperData: any, config: Config) {
   let url = pdf_template_url;
